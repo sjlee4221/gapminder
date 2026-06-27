@@ -210,9 +210,12 @@ ggplot(d_new, aes(gdpPercap)) +
 #| title: "수명 분포의 시간 이동 (1952→2007)"
 ggplot(df, aes(lifeExp, group = year, color = year)) +
   geom_density(linewidth = .8) +
-  scale_color_viridis_c(option = "C", labels = function(x) paste0(x, "년")) +
+  scale_color_viridis_c(option = "C", breaks = c(1952, 1980, 2007),
+                        labels = function(x) paste0(x, "년"),
+                        guide = guide_colorbar(barwidth = 11, barheight = .55,
+                                               title.position = "top")) +
   labs(subtitle = "쌍봉(저개발·선진) → 단봉으로 통합되며 우측 이동 (전반적 수렴)",
-       x = "기대수명 (세)", y = "밀도", color = NULL)
+       x = "기대수명 (세)", y = "밀도", color = "연도")
 ```
 
 ### Column {.tabset width="50%"}
