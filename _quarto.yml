@@ -1,0 +1,15 @@
+project:
+  title: "Gapminder EDA"
+  type: default
+  output-dir: docs
+  # 모든 문서를 프로젝트 루트 기준으로 실행 → data/ 등 상대경로가 일관되게 동작
+  execute-dir: project
+  render:
+    - eda_report.qmd
+    - eda_dashboard.qmd
+
+lang: ko
+
+execute:
+  warning: false
+  message: false
