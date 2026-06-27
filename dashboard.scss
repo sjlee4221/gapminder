@@ -1,0 +1,47 @@
+/*-- scss:defaults --*/
+// 타이포그래피 — 본문 가독성/한글 폰트 스택
+$font-family-sans-serif: "Helvetica Neue", "Apple SD Gothic Neo", "Pretendard", -apple-system, sans-serif !default;
+$primary: #3E6DB5 !default;
+
+/*-- scss:rules --*/
+.quarto-dashboard .card {
+  border: 1px solid #e9ecef;
+  border-radius: .55rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+}
+
+// 카드 제목 — 작고 또렷한 라벨 스타일
+.quarto-dashboard .card .card-header {
+  background: #fbfcfd;
+  border-bottom: 1px solid #eef1f4;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .01em;
+  color: #2b3640;
+}
+
+// 밸류박스 — 큰 수치 강조, 차분한 배경
+.quarto-dashboard .valuebox .value {
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.quarto-dashboard .valuebox .title {
+  font-size: .82rem;
+  opacity: .92;
+}
+
+// 탭 네비게이션 살짝 정돈
+.quarto-dashboard .nav-tabs .nav-link {
+  font-size: .82rem;
+  font-weight: 500;
+}
+
+// 표 — 헤더 강조, 행 구분 은은하게
+.quarto-dashboard .card table {
+  font-size: .82rem;
+}
+.quarto-dashboard .card table thead th {
+  border-bottom: 2px solid #dde2e7;
+  color: #2b3640;
+}
