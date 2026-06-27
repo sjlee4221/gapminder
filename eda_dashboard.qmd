@@ -177,6 +177,78 @@ ggplot(agg, aes(year, gdpPercap, color = continent)) +
        x = NULL, y = "1인당 GDP (로그)")
 ```
 
+# 발전 궤적
+
+## Row {height="62%"}
+
+```{r}
+#| title: "55년간 국가 발전 궤적 — 소득 × 기대수명 (1952→2007)"
+hi   <- c("Korea, Rep.", "China", "Botswana", "Rwanda", "Japan", "United States")
+HCOL <- c("Korea, Rep."="#C0392B", "China"="#E6772E", "Botswana"="#1F9E89",
+          "Rwanda"="#8E5BA6", "Japan"="#3E6DB5", "United States"="#444444")
+KOR  <- c("Korea, Rep."="대한민국", "China"="중국", "Botswana"="보츠와나",
+          "Rwanda"="르완다", "Japan"="일본", "United States"="미국")
+dfo <- df[order(df$country, df$year), ]
+dh  <- dfo[dfo$country %in% hi, ]; dh$kr <- KOR[dh$country]
+ends <- dh[dh$year == latest, ]; starts <- dh[dh$year == first_y, ]
+ends$ny <- ends$lifeExp + c("Japan"=1.4, "Korea, Rep."=-1.6, "United States"=0.2,
+                            "China"=1.2, "Botswana"=0, "Rwanda"=-0.4)[ends$country]
+ggplot() +
+  geom_path(data = dfo, aes(gdpPercap, lifeExp, group = country),
+            color = "grey85", linewidth = .35, alpha = .6) +
+  geom_path(data = dh, aes(gdpPercap, lifeExp, group = country, color = country),
+            linewidth = 1.1, lineend = "round",
+            arrow = arrow(type = "closed", length = unit(.10, "inches"))) +
+  geom_point(data = starts, aes(gdpPercap, lifeExp, color = country),
+             shape = 21, fill = "white", size = 2.6, stroke = 1.1) +
+  geom_point(data = ends, aes(gdpPercap, lifeExp, color = country), size = 3) +
+  geom_text(data = ends, aes(gdpPercap, ny, color = country, label = kr),
+            hjust = -0.2, fontface = "bold", size = 3.7) +
+  scale_x_log10(labels = label_dollar(scale_cut = cut_short_scale()),
+                expand = expansion(mult = c(.05, .18))) +
+  scale_color_manual(values = HCOL) +
+  labs(subtitle = "○ 1952 출발 → ● 2007 도착 · 한국·중국은 우상향 급등, 보츠와나·르완다는 에이즈·내전으로 수명 급락",
+       x = "1인당 GDP (로그 눈금)", y = "기대수명 (세)",
+       caption = "회색 선 = 전체 142개국 궤적") +
+  theme(legend.position = "none", plot.subtitle = element_text(size = rel(.92)))
+```
+
+## Row {height="38%"}
+
+### Column {width="42%"}
+
+```{r}
+#| title: "한강의 기적 — 대한민국 (1952 → 2007)"
+ko_o <- d_old[d_old$country == "Korea, Rep.", ]
+ko_n <- d_new[d_new$country == "Korea, Rep.", ]
+data.frame(
+  지표  = c("1인당 GDP", "기대수명"),
+  `1952년` = c(dollar(round(ko_o$gdpPercap)), paste0(round(ko_o$lifeExp, 1), "세")),
+  `2007년` = c(dollar(round(ko_n$gdpPercap)), paste0(round(ko_n$lifeExp, 1), "세")),
+  변화 = c(paste0("×", round(ko_n$gdpPercap / ko_o$gdpPercap, 1)),
+           paste0("+", round(ko_n$lifeExp - ko_o$lifeExp, 1), "세")),
+  check.names = FALSE) |>
+  kable(align = "lrrr")
+```
+
+### Column {width="58%"}
+
+```{r}
+#| title: "주요국 55년 변화 — 소득 배수와 수명 증가"
+hh <- merge(d_old[d_old$country %in% hi, c("country","gdpPercap","lifeExp")],
+            d_new[d_new$country %in% hi, c("country","gdpPercap","lifeExp")],
+            by = "country", suffixes = c("_o","_n"))
+hh <- hh[order(-hh$gdpPercap_n / hh$gdpPercap_o), ]
+data.frame(
+  국가 = KOR[hh$country],
+  `1952 GDP` = dollar(round(hh$gdpPercap_o)),
+  `2007 GDP` = dollar(round(hh$gdpPercap_n)),
+  `GDP 배수` = paste0("×", round(hh$gdpPercap_n / hh$gdpPercap_o, 1)),
+  `수명 증가` = paste0(round(hh$lifeExp_n - hh$lifeExp_o, 1), "세"),
+  check.names = FALSE) |>
+  kable(align = "lrrrr", row.names = FALSE)
+```
+
 # 분포 · 대륙
 
 ## Row
